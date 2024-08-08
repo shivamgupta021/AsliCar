@@ -1,0 +1,14 @@
+[tool.poetry]
+name = "asli-car"
+version = "0.1.0"
+description = "Telegram bot used to scrape and notify about second hand cars from OLX which are listed by actual users and not dealers, which helps one to one dealing between the seller and buyer."
+authors = ["Shivam Gupta <shivam.gupta02210@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
