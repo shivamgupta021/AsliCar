@@ -1,0 +1,34 @@
+name: AsliCar Finder
+
+on:
+  schedule:
+    - cron: '0 */2 * * *'
+
+jobs:
+
+  find-ads:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.12'
+
+      - name: Install Poetry
+        run: |
+          python3 -m pip install --upgrade pip
+          pip install poetry
+
+      - name: Install Requirements
+        run: |
+          poetry install --no-root
+
+      - name: Run the script
+        env:
+          BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
+          CHAT_ID: ${{ secrets.CHAT_ID }}
+          API_URL: ${{ secrets.API_URL }}
+        run: python main.py
