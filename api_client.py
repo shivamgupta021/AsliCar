@@ -30,7 +30,7 @@ def fetch_user_data(user_id: str) -> Dict[str, any]:
     return {}
 
 
-def fetch_ads() -> List[Dict[str, any]]:  # pages: int = 10
+def fetch_ads(pages: int = 10) -> List[Dict[str, any]]:
     """
     Fetch ads data from the API for the specified number of pages.
 
@@ -41,7 +41,7 @@ def fetch_ads() -> List[Dict[str, any]]:  # pages: int = 10
         List[Dict[str, any]]: The list of ads data.
     """
     all_ads = []
-    for page in range(1, 2):
+    for page in range(1, pages + 1):
         page_url = API_URL.replace("?page=1", f"?page={page}")
         try:
             response = requests.get(page_url, headers=HEADERS, timeout=10)
