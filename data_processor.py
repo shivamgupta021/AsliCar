@@ -21,9 +21,9 @@ def filter_user_data(user_data: Dict[str, any]) -> bool:
     user_name = user_data.get("name", "")
     motor_keywords = ["motors", "automobile", "cars", "vehicles", "motor", "enterprise"]
     if (
-            user_data.get("is_business")
-            or user_data.get("kyc", {}).get("status") == "verified"
-            or any(keyword in user_name.lower() for keyword in motor_keywords)
+        user_data.get("is_business")
+        or user_data.get("kyc", {}).get("status") == "verified"
+        or any(keyword in user_name.lower() for keyword in motor_keywords)
     ):
         return True
     return False
