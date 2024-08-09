@@ -1,9 +1,11 @@
 name: AsliCar Finder
 
-#on:
-#  schedule:
-#    - cron: '*/5 * * * *'
-
+on:
+  #  schedule:
+  #    - cron: '*/5 * * * *'
+  push:
+    branches:
+      - main
 jobs:
 
   find-ads:
