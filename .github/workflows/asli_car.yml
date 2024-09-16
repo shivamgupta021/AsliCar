@@ -2,12 +2,12 @@ name: AsliCar Finder
 
 on:
   schedule:
-    - cron: '* */12 * * *'
+    - cron: '0 0 * * *'  # Run once per day at midnight UTC
   push:
     branches:
       - main
-jobs:
 
+jobs:
   find-ads:
     runs-on: ubuntu-latest
 
@@ -23,6 +23,7 @@ jobs:
         run: |
           python3 -m pip install --upgrade pip
           pip install poetry
+
       - name: Print Requirements
         run: |
           pip list

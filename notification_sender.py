@@ -18,12 +18,11 @@ async def send(bot, chat, msg):
     await bot.send_message(chat_id=chat, text=msg)
 
 
-def send_notification(loop, bot, ad):
+async def send_notification(bot, ad):
     """
     Sends a notification for a specific ad.
 
     Args:
-        loop: The asyncio event loop.
         bot: The Telegram bot instance.
         ad (dict): The ad information in the form of a dictionary.
             Expected keys: 'title', 'main_info', 'price', 'car_body_type',
@@ -43,13 +42,11 @@ def send_notification(loop, bot, ad):
     )
 
     logger.info(f"Sending notification for AD ID: {ad['ad_id']} ({ad['ad_url']})...")
-
-    loop.run_until_complete(send(bot, CHAT_ID, message))
-
+    await send(bot, CHAT_ID, message)
     return 1
 
 
-def notify_ads(ads):
+async def notify_ads(ads):
     """
     Sends notifications for a list of ads to a specified Telegram chat.
 
@@ -63,19 +60,29 @@ def notify_ads(ads):
         None
     """
     application = ApplicationBuilder().token(BOT_TOKEN).build()
-    bot = application.bot
-    loop = asyncio.new_event_loop()
-    asyncio.set_event_loop(loop)
+    async with application:
+        bot = application.bot
+        notified_ads_count = 0
 
-    notified_ads_count = 0
-    for ad in ads:
-        notified_ads_count += send_notification(loop, bot, ad)
+        # Send notifications for each ad
+        for ad in ads:
+            notified_ads_count += await send_notification(bot, ad)
 
-    if notified_ads_count > 0:
-        loop.run_until_complete(
-            send(bot, CHAT_ID, f"Total new ads sent: {notified_ads_count}")
-        )
-    else:
-        loop.run_until_complete(send(bot, CHAT_ID, "No new ads found!"))
+        # Send a summary message
+        if notified_ads_count > 0:
+            await send(bot, CHAT_ID, f"Total new ads sent: {notified_ads_count}")
+        else:
+            await send(bot, CHAT_ID, "No new ads found!")
 
-    loop.close()
+
+def start_notifying(ads):
+    """
+    Entry point to trigger ad notifications.
+
+    Args:
+        ads (list): A list of ads to notify about.
+
+    Returns:
+        None
+    """
+    asyncio.run(notify_ads(ads))
